@@ -1,6 +1,6 @@
 qrusage
 =======
-[![Build Status](https://api.travis-ci.org/andrasq/node-qrusage.svg?branch=master)](https://travis-ci.org/andrasq/node-qrusage?branch=master)
+[![Build Status](https://github.com/andrasq/node-qrusage/actions/workflows/nodejs.yml/badge.svg)](https://github.com/andrasq/node-qrusage/actions/workflows/nodejs.yml)
 [![Coverage Status](https://coveralls.io/repos/github/andrasq/node-qrusage/badge.svg?branch=master)](https://coveralls.io/github/andrasq/node-qrusage?branch=master)
 
 
@@ -11,6 +11,8 @@ metrics tracked by the operating system for the current process, or for its
 completed child processes.  Low overhead, runs over 3 million calls /
 second (node v8.9.4).
 
+If the install errors out with `fatal error: bits/c++config.h: No such file or directory`,
+try to `sudo apt-get install gcc-multilib g++-multilib`.
 
 ## Summary
 
@@ -178,6 +180,7 @@ Linux does not maintain many of these fields, and currently returns zeroes for:
 
 ## Change Log
 
+- 1.6.0  fix to work with newer node that uses V8 without `ArrayBuffer::GetContents()`, run tests on github 
 - 1.5.2  work around travis non-build, test with coveralls
 - 1.5.1  change to build under node-v12
 - 1.5.0  new calls `storeUsage`, `removeUsage`, `deltaUsage`, `sumUsage`

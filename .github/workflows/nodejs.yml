@@ -1,0 +1,38 @@
+name: build
+on:
+  push:
+    # branches: [ $default-branch, ar-test ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # 0.10 and 0.8 might need a newer qmock
+        node: [ 16, 13.8.0 ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # work around the "bits/c++config.h: No such file or directory" github build error
+      - run: sudo apt-get install gcc-multilib g++-multilib || true
+
+      - run: npm install
+
+      - name: npm test
+        run: test `node -v` '!=' 'v13.8.0' && npm test || true
+
+      - name: install nyc
+        if: ${{ matrix.node == '13.8.0' }}
+        run: npm install -g nyc@8.4.0
+
+      - name: test coverage
+        if: ${{ matrix.node == '13.8.0' }}
+        run: npm run coverage
+
+      - name: upload coverage
+        if: ${{ matrix.node == '13.8.0' }}
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ github.token }}
